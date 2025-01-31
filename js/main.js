@@ -8,3 +8,26 @@
 *  Vercel Link: https://web-assignment1-ceb6-wptfbyec4-nilrudra-mukhopadhyays-projects.vercel.app/api/movies
 *
 ********************************************************************************/
+let page = 1;
+const perPage = 10;
+
+// Main function for API data retrival and data rendering---------------------------------------------------------------
+async function loadMovieData(title = null) {
+    const baseURL = `https://web-assignment1-ceb6-m21fr2tex-nilrudra-mukhopadhyays-projects.vercel.app/`;
+    let url = +title
+        ? `api/movies${baseURL}?page=${page}&perPage=${perPage}&title=${encodeURIComponent(title)}`
+        : `api/movies${baseURL}?page=${page}&perPage=${perPage}`;
+
+    fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+        console.log(data);
+    })
+    .catch((err) => console.error('Error fetching data:', err));
+};
+
+
+// Loading initial movie data onto the page
+document.addEventListener("DOMContentLoaded", function () {
+    loadMovieData();
+});
