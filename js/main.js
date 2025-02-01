@@ -13,10 +13,10 @@ const perPage = 10;
 
 // Main function for API data retrival and data rendering---------------------------------------------------------------
 async function loadMovieData(title = null) {
-    const baseURL = `https://web-assignment1-ceb6-m21fr2tex-nilrudra-mukhopadhyays-projects.vercel.app/`;
-    let url = +title
-        ? `api/movies${baseURL}?page=${page}&perPage=${perPage}&title=${encodeURIComponent(title)}`
-        : `api/movies${baseURL}?page=${page}&perPage=${perPage}`;
+    const baseURL = `https://web-assignment1-ceb6.vercel.app/api/movies`;
+    let url = +title 
+        ? `${baseURL}?page=${page}&perPage=${perPage}&title=${encodeURIComponent(title)}` 
+        : `${baseURL}?page=${page}&perPage=${perPage}`;
 
     fetch(url)
     .then((res) => res.json())
