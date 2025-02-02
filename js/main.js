@@ -1,10 +1,10 @@
 /*********************************************************************************
-*  WEB422 – Assignment 1
+*  WEB422 – Assignment 2
 *  I declare that this assignment is my own work in accordance with Seneca Academic Policy.  
 *  No part of this assignment has been copied manually or electronically from any other source
 *  (including web sites) or distributed to other students.
 * 
-*  Name: Nilrudra Mukhopadhyay Student ID: 134061175 Date: 16/01/2025
+*  Name: Nilrudra Mukhopadhyay Student ID: 134061175 Date: 01/02/2025
 *  Vercel API Link: https://web-assignment1-ceb6.vercel.app/api/movies
 *
 ********************************************************************************/
@@ -24,7 +24,11 @@ function loadMovieData(title = null) {
     fetch(url)
     .then((res) => res.json())
     .then((data) => {
-        console.log(data);      // debugging data check
+        if (title && (!data || data.length === 0)) {
+            alert(`No results found for "${title}".`);
+            loadMovieData();    // Recursively call function to reload page
+            return;
+        }
         renderData(data);       // creating the <tr> Elements
         updateCurrentPage();    // Updating the "Current Page"
         addClickEvent(data);    // Adding Click Events        
@@ -107,24 +111,40 @@ function displayMovieDetails(details) {
 
 
 
-// Event listeners with functions to render the page ---------------------------------------------------------------------------
-// Launches the loadMovieData() function each time the page refreshes or during first launch
+// Event listeners with functions to render the page after DOM loads -----------------------------------------------------------
+// Calls the loadMovieData() function each time the page refreshes or during first launch
 document.addEventListener("DOMContentLoaded", function () {
     loadMovieData();
-});
 
-// Loads the previous page using loadMovieData() when user clicks on the previous pagination button
-document.getElementById('previous-page').addEventListener('click', () => {
-    if (page > 1) {
-        page = page - 1;
-        loadMovieData();
-    }
-});
+    // Loads the previous page using loadMovieData() when user clicks on the previous pagination button
+    document.getElementById('previous-page').addEventListener('click', () => {
+        if (page > 1) {
+            page = page - 1;
+            loadMovieData();
+        }
+    });
 
-// Loads the next page using loadMovieData() when user clicks on the next pagination button
-document.getElementById('next-page').addEventListener('click', () => {
-    if (page > 0 || page < 10) {
-        page = page + 1;
+    // Loads the next page using loadMovieData() when user clicks on the next pagination button
+    document.getElementById('next-page').addEventListener('click', () => {
+        if (page < 10) {
+            page = page + 1;
+            loadMovieData();
+        }
+    });
+
+    // Submit movie title functionality calls the loadMovieData() function with the movie title passed to it
+    document.getElementById('searchForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const title = document.getElementById('title').value.trim();
+        if (title) {
+            page = 1;   // nothing shows unless this is here
+            loadMovieData(title);
+        }
+    });
+
+    // Clear movie title functionality, resets the page an calls loadMovieData() with no arguments
+    document.getElementById('clearForm').addEventListener('click', () => {
+        document.getElementById('title').value = "";
         loadMovieData();
-    }
+    });
 });
