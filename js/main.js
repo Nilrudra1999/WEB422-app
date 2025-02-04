@@ -5,7 +5,7 @@
 *  (including web sites) or distributed to other students.
 * 
 *  Name: Nilrudra Mukhopadhyay Student ID: 134061175 Date: 01/02/2025
-*  Vercel API Link: https://web-assignment1-ceb6.vercel.app/api/movies
+*  Vercel Link: https://web-assignment1-ceb6.vercel.app/api/movies
 *
 ********************************************************************************/
 let page = 1;
@@ -91,7 +91,7 @@ function displayMovieDetails(details) {
     const modelTitle = document.querySelector('.modal-title');
     modelTitle.innerHTML = details.title;
     let htmlContent = `
-            <img class="img-fluid w-100" src="${details.poster}}"/><br>
+            <img class="img-fluid w-100" src="${details.poster}"/><br>
             <br><strong>Directed By:</strong> ${details.directors.join(', ')}<br>
             <br>${details.fullplot || 'Full plot not avaiable.'}<br>
             <br><strong>Cast:</strong> ${details.cast.join(', ') || 'N/A'}.<br>
