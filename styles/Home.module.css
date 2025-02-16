@@ -1,12 +1,12 @@
 #moviesTable tr:hover { 
     cursor:pointer; 
-}
-
-.container {
+  }
+  
+  .container {
     padding-top: 30px;
     max-width: 95%;
-}
-
-.modal-dialog {
+  }
+  
+  .modal-dialog {
     max-width: 750px;
-}
+  }
