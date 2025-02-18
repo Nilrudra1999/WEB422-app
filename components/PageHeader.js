@@ -9,17 +9,17 @@
 *  Vercel App Link:
 *
 ********************************************************************************/
-import "@/styles/globals.css";
-import Layout from "@/components/Layout";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { SWRConfig } from 'swr';
+import { Card } from "react-bootstrap";
 
-export default function App({ Component, pageProps }) {
+export default function PageHeader({ text }) {
     return (
-        <SWRConfig value={{ fetcher: (...args) => fetch(...args).then((res) => res.json()) }}>
-            <Layout>
-                <Component {...pageProps} />
-            </Layout>
-        </SWRConfig>
+        <>
+            <Card className="bg-light">
+                <Card.Body>
+                    { text }
+                </Card.Body>
+            </Card>
+            <br/>
+        </>
     );
 };

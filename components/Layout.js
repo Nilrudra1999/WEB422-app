@@ -9,17 +9,18 @@
 *  Vercel App Link:
 *
 ********************************************************************************/
-import "@/styles/globals.css";
-import Layout from "@/components/Layout";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { SWRConfig } from 'swr';
+import { Container } from 'react-bootstrap';
+import MainNav from './MainNav';
 
-export default function App({ Component, pageProps }) {
+export default function Layout(props) {
     return (
-        <SWRConfig value={{ fetcher: (...args) => fetch(...args).then((res) => res.json()) }}>
-            <Layout>
-                <Component {...pageProps} />
-            </Layout>
-        </SWRConfig>
+        <>
+            <MainNav />
+            <br />
+            <Container>
+                {props.children}
+            </Container>
+            <br />
+        </>
     );
 };
