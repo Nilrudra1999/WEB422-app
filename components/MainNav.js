@@ -14,6 +14,11 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Link from "next/link";
 
+
+/********************************************************************************
+*   MainNav component
+*   Provides a templated navbar for all pages of the web application with links
+********************************************************************************/
 export default function MainNav() {
     return (
         <>

@@ -12,6 +12,12 @@
 import { Container } from 'react-bootstrap';
 import MainNav from './MainNav';
 
+
+/********************************************************************************
+*   Layout component
+*   Provides a starting template of sorts for every page of the web application
+*   Includes a fixed navbar at the top, and a container to render the page onto 
+********************************************************************************/
 export default function Layout(props) {
     return (
         <>

@@ -11,12 +11,17 @@
 ********************************************************************************/
 import { Card } from "react-bootstrap";
 
+
+/********************************************************************************
+*   Page Header component
+*   Provides a header for the page, along with a box and some text formating
+********************************************************************************/
 export default function PageHeader({ text }) {
     return (
         <>
             <Card className="bg-light">
                 <Card.Body>
-                    { text }
+                    <strong>{ text }</strong>
                 </Card.Body>
             </Card>
             <br/>
