@@ -55,6 +55,7 @@ export default function Title() {
                                 <MovieDetails movie={movie} />
                             </Card.Body>
                         </Card>
+                        <br/>
                     </div>
                 ))}
             </Container>
