@@ -2,27 +2,27 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import { Container } from 'react-bootstrap';
 
-
+// Main navbar component with search bar functionality and value extraction
 export default function MainNav() {
     const [searchField, setSearchField] = useState('');
     const router = useRouter();
 
     const handleSubmit = (event) => {
-        event.preventDefault();
-        if (searchField.trim()) {
+        event.preventDefault(); // stops page from refreshing
+        if (searchField.trim()) { // extract search input, trim, and apply to the API url
             router.push(`/artwork?title=true&q=${encodeURIComponent(searchField)}`);
         }
     };
 
     return (
-        <>
-            <Navbar expand="lg" className="navbar-dark fixed-top" style={{ backgroundColor: "#2A3B55" }}>
-                <Container fluid>
+        <>  {/* navbar with inline styling, changing the color of navbar background to a dark gray */}
+            <Navbar expand="lg" className="fixed-top navbar-dark navbar-expand-lg py-3" style={{ backgroundColor: "#2A3B55" }}>
+                <Container>
                     <Navbar.Brand>Nilrudra Mukhopadhyay</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
@@ -47,7 +47,8 @@ export default function MainNav() {
                                 value={searchField}
                                 onChange={(e) => setSearchField(e.target.value)}
                             />
-                            <Button type="submit" variant="success" style={{ backgroundColor: "#5ccf65" }}>Search</Button>
+                            {/* inline styling to change the button to a light teal color */}
+                            <Button type="submit" variant="success" style={{ backgroundColor: "#39B8B8" }}>Search</Button>
                         </Form>
                     </Navbar.Collapse>
                 </Container>

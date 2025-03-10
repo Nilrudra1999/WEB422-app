@@ -3,6 +3,7 @@ import { SWRConfig } from 'swr';
 import Layout from '../components/Layout';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// SWR fetcher functionality implementation included along with the layout
 export default function MyApp({ Component, pageProps }) {
     return (
         <SWRConfig
