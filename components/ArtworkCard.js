@@ -15,25 +15,25 @@ export default function ArtworkCard({ objectID }) {
     const placeholderImage = 'https://via.placeholder.com/375x375.png?text=[+Not+Available+]'; // fallback
 
     return (
-        <>  {/* Artwork card component */}
-            <Card style={{ width: '18rem' }}>
+        <Card style={{ width: '18rem' }}> {/* Artwork card component */}
+            {primaryImageSmall && ( // Only render the image if available
                 <Card.Img
                     variant="top"
                     src={primaryImageSmall || placeholderImage}
                     alt={title || 'N/A'}
                 />
-                <Card.Body>
-                    <Card.Title>{title || 'N/A'}</Card.Title>
-                    <Card.Text>
-                        <p>Object Date: {objectDate || 'N/A'}</p>
-                        <p>Classification: {classification || 'N/A'}</p>
-                        <p>Medium: {medium || 'N/A'}</p>
-                    </Card.Text>
-                    <Link href={`/artwork/${objectID}`} passHref>
-                        <Button variant="primary">View {objectID}</Button>
-                    </Link>
-                </Card.Body>
-            </Card>
-        </>
+            )}
+            <Card.Body>
+                <Card.Title>{title || 'N/A'}</Card.Title>
+                <Card.Text>
+                    <p>Object Date: {objectDate || 'N/A'}</p>
+                    <p>Classification: {classification || 'N/A'}</p>
+                    <p>Medium: {medium || 'N/A'}</p>
+                </Card.Text>
+                <Link href={`/artwork/${objectID}`} passHref>
+                    <Button variant="primary">View {objectID}</Button>
+                </Link>
+            </Card.Body>
+        </Card>
     );
 };

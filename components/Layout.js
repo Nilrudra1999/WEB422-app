@@ -8,7 +8,6 @@ export default function Layout({ children }) {
         <>
             <MainNav />
             <br />
-            <br />
             <Container>
                 {children}
             </Container>
