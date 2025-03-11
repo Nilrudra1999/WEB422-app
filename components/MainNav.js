@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { Container } from 'react-bootstrap';
 
-// Main navbar component with search bar functionality and value extraction
+// Main navbar component with search bar functionality and value extraction from the search bar
 export default function MainNav() {
     const [searchField, setSearchField] = useState('');
     const router = useRouter();
@@ -15,7 +15,7 @@ export default function MainNav() {
         event.preventDefault();   // stops page from refreshing
         if (searchField.trim()) { // extract search input, trim, and apply to the API url
             router.push(`/artwork?title=true&q=${encodeURIComponent(searchField.trim())}`);
-            setSearchField('');
+            setSearchField('');   // sets the search bar back to blank
         }
     };
 

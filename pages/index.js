@@ -14,7 +14,7 @@ export default function Home() {
                     />
                 </Col>
             </Row>
-            <Row className="mt-4"> {/* text container lower portion of the homepage */}
+            <Row className="mt-4"> {/* text container lower portion of the homepage, filler text */}
                 <Col lg={6}> {/* right side text container */}
                     <p>
                         The Metropolitan Museum of Art of New York City, colloquially "the Met", is the largest art museum in the Americas. Its permanent 

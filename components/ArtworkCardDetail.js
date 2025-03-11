@@ -15,23 +15,27 @@ export default function ArtworkCardDetail({ objectID }) {
     const placeholderImage = 'https://via.placeholder.com/375x375.png?text=[+Not+Available+]'; // fallback url
 
     return (
-        <Card style={{ width: '18rem' }}> {/* renders the Card.Img only if and when the primaryImage value exists */}
+        <Card> {/* renders the Card.Img only if and when the primaryImage value exists */}
             {primaryImage && <Card.Img variant="top" src={primaryImage} alt={title || 'N/A'} />}
             <Card.Body>
                 <Card.Title>{title || 'N/A'}</Card.Title>
                 <Card.Text>
-                    <p>Object Date: {objectDate || 'N/A'}</p>
-                    <p>Classification: {classification || 'N/A'}</p>
-                    <p>Medium: {medium || 'N/A'}</p>
-                    <br />
-                    <br />
-                    <p>Artist: {artistDisplayName ? <a href={artistWikidata_URL} target="_blank" rel="noreferrer">wiki</a> : 'N/A'}</p>
-                    <p>Credit Line: {creditLine || 'N/A'}</p>
-                    <p>Dimensions: {dimensions || 'N/A'}</p>
+                    <strong>Date:</strong> {objectDate || 'N/A'}<br/>
+                    <strong>Classification:</strong> {classification || 'N/A'}<br/>
+                    <strong>Medium:</strong> {medium || 'N/A'}
+                    <br /><br/>
+                    {/* renders artist's name but doesn't render the url to the wiki page if it doesn't exist */}
+                    <strong>Artist:</strong> {artistDisplayName ? (
+                        <>
+                            {artistDisplayName}
+                            {artistWikidata_URL && (
+                                <> <a href={artistWikidata_URL} target="_blank" rel="noreferrer">(wiki)</a></>
+                            )}
+                        </>
+                    ) : 'N/A'}<br/>
+                    <strong>Credit Line:</strong> {creditLine || 'N/A'}<br/>
+                    <strong>Dimensions:</strong> {dimensions || 'N/A'}<br/>
                 </Card.Text>
-                <Link href={`/artwork/${objectID}`} passHref>
-                    <Button variant="primary">View {objectID}</Button>
-                </Link>
             </Card.Body>
         </Card>
     );

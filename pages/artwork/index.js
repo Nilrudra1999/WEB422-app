@@ -36,12 +36,18 @@ export default function Artwork() { // creates the artwork page with artwork car
     }, [data]);
 
     if (error) return <Error statusCode={404} />;   // Error guard, displays the 404 error to end users
-    if (!artworkList || artworkList.length === 0) { // null results triggers this
+    if (!artworkList || artworkList.length === 0) { // null results triggers this error guard
         return (
             <Container>
                 <br />
-                <h4>Nothing Here</h4>
-                <p>Try searching for something else.</p>
+                <Card>
+                    <Card.Body>
+                        <Card.Text>
+                            <h4>Nothing Here</h4>
+                            <p>Try searching for something else.</p>
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
             </Container>
         );
     }

@@ -23,7 +23,7 @@ export default function ArtworkCard({ objectID }) {
                     alt={title || 'N/A'}
                 />
             )}
-            <Card.Body>
+            <Card.Body> {/* if a card's data is doesn't exist then it doesn't get render, instead 'NA' is rendered as placeholder */}
                 <Card.Title>{title || 'N/A'}</Card.Title>
                 <Card.Text>
                     <p>Object Date: {objectDate || 'N/A'}</p>

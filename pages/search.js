@@ -5,15 +5,21 @@ import { Form, Button, Row, Col, Container } from "react-bootstrap";
 export default function AdvancedSearch() {
     const router = useRouter();
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const submitForm = (data) => {
-        let queryString = `searchBy=${encodeURIComponent(data.searchBy)}`; // Construct the query string
-        if (data.geoLocation) queryString += `&geoLocation=${encodeURIComponent(data.geoLocation)}`; 
-        if (data.medium) queryString += `&medium=${encodeURIComponent(data.medium)}`;
-        if (data.searchBy === 'title' && data.q) data.q = `"${data.q}"`;
+    const submitForm = (data) => { // Constructs the url string
+        let queryString = ``;      // url string variable init
+        if (data.searchBy === 'title') {
+            queryString += `title=true`;
+        } else if (data.searchBy === 'tags') {
+            queryString += `tags=true`;
+        } else if (data.searchBy === 'artistOrCulture') {
+            queryString += `artistOrCulture=true`;
+        }
         queryString += `&isOnView=${data.isOnView}`;
         queryString += `&isHighlight=${data.isHighlight}`;
+        if (data.geoLocation) queryString += `&geoLocation=${encodeURIComponent(data.geoLocation)}`; 
+        if (data.medium) queryString += `&medium=${encodeURIComponent(data.medium)}`;
         queryString += `&q=${encodeURIComponent(data.q)}`;
-        router.push(`/artwork?${queryString}`); // Navigates to the artwork page with query string
+        router.push(`/artwork?${queryString}`);
     };
 
     return (
@@ -31,7 +37,7 @@ export default function AdvancedSearch() {
                         {errors.q && <div className="invalid-feedback">This field is required</div>}
                     </Form.Group>
                 </Row>
-                <Row className="mt-3"> {/* Second Row: Search By, GeoLocation, Medium */}
+                <Row className="mt-3"> {/* Second Row: Search By dropdown list, GeoLocation, and Medium text fields */}
                     <Col md={4}>
                         <Form.Group>
                             <Form.Label>Search By</Form.Label>
