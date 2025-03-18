@@ -15,7 +15,7 @@ export default function Home() {
                 </Col>
             </Row>
             <Row className="mt-4"> {/* text container lower portion of the homepage, filler text */}
-                <Col lg={6}> {/* right side text container */}
+                <Col lg={7}> {/* left side text container */}
                     <p>
                         The Metropolitan Museum of Art of New York City, colloquially "the Met", is the largest art museum in the Americas. Its permanent 
                         collection contains over two million works, divided among 17 curatorial departments. The main building is at 1000 Fifth Avenue, along 
@@ -31,7 +31,7 @@ export default function Home() {
                         and armor from around the world, ranging from 1st-century Rome to modern American designs, installed within the galleries.
                     </p>
                 </Col>
-                <Col lg={6}> {/* left side text container */}
+                <Col lg={5}> {/* right side text container */}
                     <p>
                         The Fifth Avenue building opened on March 30, 1880. In 2021, despite the COVID-19 pandemic in New York City, 
                         the museum attracted 1,958,000 visitors, ranking fourth on the list of most-visited art museums in the world.
