@@ -4,15 +4,20 @@ import Link from 'next/link';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { useAtom } from 'jotai';
+import { searchHistoryAtom } from '@/store';
 
 // Main navbar component with search bar functionality and value extraction from the search bar
 export default function MainNav() {
     const [searchField, setSearchField] = useState('');
     const [isExpanded, setIsExpanded] = useState(false); // controls navbar expansion
     const router = useRouter();
+    const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom); // Access to the search history state
     const handleSubmit = (event) => {
         event.preventDefault();   // stops page from refreshing
         if (searchField.trim()) { // extract search input, trim, and apply to the API url
+            const queryString = `title=true&q=${encodeURIComponent(searchField.trim())}`;
+            setSearchHistory((current) => [...current, queryString]);
             router.push(`/artwork?title=true&q=${encodeURIComponent(searchField.trim())}`);
             setSearchField('');   // sets the search bar back to blank
             setIsExpanded(false); // Close navbar on search
@@ -40,10 +45,10 @@ export default function MainNav() {
                             navbarScroll
                         >
                             <Link href="/" legacyBehavior passHref>
-                                <Nav.Link onClick={handleNavClick}>Home</Nav.Link>
+                                <Nav.Link active={router.pathname === "/"} onClick={handleNavClick}>Home</Nav.Link>
                             </Link>
                             <Link href="/search" legacyBehavior passHref>
-                                <Nav.Link onClick={handleNavClick}>Advanced Search</Nav.Link>
+                                <Nav.Link active={router.pathname === "/search"} onClick={handleNavClick}>Advanced Search</Nav.Link>
                             </Link>
                         </Nav>
                         &nbsp;
@@ -63,7 +68,10 @@ export default function MainNav() {
                         <Nav> {/* User Name Dropdown with Favourites */}
                             <NavDropdown title="Nilrudra Mukhopadhyay" id="user-dropdown">
                                 <Link href="/favourites" legacyBehavior passHref>
-                                    <NavDropdown.Item onClick={handleNavClick}>+ favourite</NavDropdown.Item>
+                                    <NavDropdown.Item active={router.pathname === "/favourites"} onClick={handleNavClick}>+ favourite</NavDropdown.Item>
+                                </Link>
+                                <Link href="/history" legacyBehavior passHref>
+                                    <NavDropdown.Item active={router.pathname === "/history"} onClick={handleNavClick}>Search History</NavDropdown.Item>
                                 </Link>
                             </NavDropdown>
                         </Nav>
