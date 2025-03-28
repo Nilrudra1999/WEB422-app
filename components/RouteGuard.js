@@ -40,7 +40,7 @@ export default function RouteGuard(props) {
         const path = url.split('?')[0];
         if (!isAuthenticated() && !PUBLIC_PATHS.includes(path)) {
             setAuthorized(false);
-            router.push('/login');
+            router.push('/api/user/login');
         } else {
             setAuthorized(true);
         }
