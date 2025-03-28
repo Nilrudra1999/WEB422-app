@@ -6,8 +6,7 @@
 * 
 *  Name: Nilrudra Mukhopadhyay   Student ID: 134061175   Date: 04/07/2025
 *
-*
-********************************************************************************/ 
+********************************************************************************/
 import { Image } from "react-bootstrap";
 import { Col, Container, Row } from "react-bootstrap";
 

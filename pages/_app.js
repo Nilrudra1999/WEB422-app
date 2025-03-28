@@ -1,11 +1,29 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "@/styles/globals.css";
 import { SWRConfig } from 'swr';
 import { Provider } from 'jotai';
-import Layout from '../components/Layout';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import Layout from '../components/Layout.js';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { isAuthenticated } from "../lib/authenticate.js";
 
 // SWR fetcher functionality implementation included along with the layout
 export default function MyApp({ Component, pageProps }) {
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            if (!isAuthenticated() && router.pathname !== "/login" && router.pathname !== "/register") router.replace("/login"); 
+            else setLoading(false);
+        };
+        checkAuth();
+    }, [router.pathname]);
+
+    if (loading && router.pathname !== "/login" && router.pathname !== "/register") {
+        return null; // preventing flashing of unauthorized pages before redirect operation
+    }
+
     return (
         <Provider> {/* Provides Jotai atom state globally */}
             <SWRConfig
