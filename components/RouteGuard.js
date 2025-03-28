@@ -25,10 +25,9 @@ export default function RouteGuard(props) {
     useEffect(() => {
         updateAtoms();
         authCheck(router.pathname);
-        
         router.events.on('routeChangeComplete', authCheck);
         return () => { router.events.off('routeChangeComplete', authCheck); };
-    }, []);
+    }, [router.pathname, router.events]);
 
     async function updateAtoms() {
         const favs = await getFavourites();

@@ -21,9 +21,9 @@ export default function History() {
     const [parsedHistory, setParsedHistory] = useState([]);
     const router = useRouter();
 
-    if (!searchHistory) return null;
     
     useEffect(() => { // process parsed search history whenever the search history changes
+        if (!searchHistory) return;
         const parsed = searchHistory.map((h) => {
             let params = new URLSearchParams(h);
             let entries = params.entries();
