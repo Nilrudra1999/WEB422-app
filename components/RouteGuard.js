@@ -14,7 +14,7 @@ import { favouritesAtom, searchHistoryAtom } from '@/store';
 import { isAuthenticated } from '@/lib/authenticate';
 import { getFavourites, getHistory } from '@/lib/userData';
 
-const PUBLIC_PATHS = ['/login', '/register', '/', '/_error'];
+const PUBLIC_PATHS = ['/login', '/', '/_error'];
 
 export default function RouteGuard(props) {
     const [authorized, setAuthorized] = useState(false);
@@ -40,7 +40,7 @@ export default function RouteGuard(props) {
         const path = url.split('?')[0];
         if (!isAuthenticated() && !PUBLIC_PATHS.includes(path)) {
             setAuthorized(false);
-            router.push('/api/user/login');
+            router.push('/login');
         } else {
             setAuthorized(true);
         }
