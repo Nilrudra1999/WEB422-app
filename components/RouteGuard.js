@@ -45,5 +45,6 @@ export default function RouteGuard(props) {
             setAuthorized(true);
         }
     };
+
     return <>{authorized && props.children}</>;
 };
