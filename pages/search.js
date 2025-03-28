@@ -12,13 +12,15 @@ import { useForm } from "react-hook-form";
 import { Form, Button, Row, Col, Container } from "react-bootstrap";
 import { useAtom } from 'jotai';
 import { searchHistoryAtom } from '@/store';
+import { addToHistory } from '@/lib/userData';
 
 export default function AdvancedSearch() {
-    const router = useRouter();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom);
-    const submitForm = (data) => { // Constructs the url string
-        let queryString = ``;      // url string variable init
+    const router = useRouter();
+
+    const submitForm = async (data) => { // Make function async
+        let queryString = ``;
         if (data.searchBy === 'title') {
             queryString += `title=true`;
         } else if (data.searchBy === 'tags') {
@@ -31,7 +33,7 @@ export default function AdvancedSearch() {
         if (data.geoLocation) queryString += `&geoLocation=${encodeURIComponent(data.geoLocation)}`;
         if (data.medium) queryString += `&medium=${encodeURIComponent(data.medium)}`;
         queryString += `&q=${encodeURIComponent(data.q)}`;
-        setSearchHistory(current => [...current, queryString]); // Adds the query result to search history
+        setSearchHistory(await addToHistory(queryString));
         router.push(`/artwork?${queryString}`);
     };
 

@@ -7,7 +7,7 @@
 *  Name: Nilrudra Mukhopadhyay   Student ID: 134061175   Date: 04/07/2025
 *
 ********************************************************************************/
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Button from 'react-bootstrap/Button';
@@ -15,21 +15,33 @@ import Form from 'react-bootstrap/Form';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { useAtom } from 'jotai';
 import { searchHistoryAtom } from '@/store';
+import { addToHistory } from '@/lib/userData';
+import { readToken, removeToken } from '@/lib/authenticate';
 
 // Main navbar component with search bar functionality and value extraction from the search bar
 export default function MainNav() {
     const [searchField, setSearchField] = useState('');
     const [isExpanded, setIsExpanded] = useState(false); // controls navbar expansion
-    const router = useRouter();
     const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom); // Access to the search history state
-    const handleSubmit = (event) => {
+    const [token, setToken] = useState(null);
+    const router = useRouter();
+
+    useEffect(() => { setToken(readToken()); }, []);
+
+    const logout = () => {
+        setIsExpanded(false);
+        removeToken();
+        router.push("/login");
+    };
+
+    const handleSubmit = async (event) => {
         event.preventDefault();   // stops page from refreshing
         if (searchField.trim()) { // extract search input, trim, and apply to the API url
             const queryString = `title=true&q=${encodeURIComponent(searchField.trim())}`;
-            setSearchHistory((current) => [...current, queryString]);
-            router.push(`/artwork?title=true&q=${encodeURIComponent(searchField.trim())}`);
-            setSearchField('');   // sets the search bar back to blank
-            setIsExpanded(false); // Close navbar on search
+            setSearchHistory(await addToHistory(queryString));
+            router.push(`/artwork?${queryString}`);
+            setSearchField('');
+            setIsExpanded(false);
         }
     };
 
@@ -48,42 +60,56 @@ export default function MainNav() {
                     <Navbar.Brand>Nilrudra Mukhopadhyay</Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" onClick={toggleNavbar} />
                     <Navbar.Collapse id="navbarScroll">
-                        <Nav
-                            className="me-auto my-2 my-lg-0"
-                            style={{ maxHeight: '100px' }}
-                            navbarScroll
-                        >
+                        <Nav className="me-auto my-2 my-lg-0" navbarScroll>
                             <Link href="/" legacyBehavior passHref>
                                 <Nav.Link active={router.pathname === "/"} onClick={handleNavClick}>Home</Nav.Link>
                             </Link>
-                            <Link href="/search" legacyBehavior passHref>
-                                <Nav.Link active={router.pathname === "/search"} onClick={handleNavClick}>Advanced Search</Nav.Link>
-                            </Link>
-                        </Nav>
-                        &nbsp;
-                        <Form className="d-flex" onSubmit={handleSubmit}>
-                            <Form.Control
-                                type="search"
-                                placeholder="Search"
-                                className="me-2"
-                                aria-label="Search"
-                                value={searchField}
-                                onChange={(e) => setSearchField(e.target.value)}
-                            />
-                            {/* inline styling to change the button to a light teal color */}
-                            <Button type="submit" variant="success" style={{ backgroundColor: "#39B8B8" }}>Search</Button>
-                        </Form>
-                        &nbsp;
-                        <Nav> {/* User Name Dropdown with Favourites */}
-                            <NavDropdown title="Nilrudra Mukhopadhyay" id="user-dropdown">
-                                <Link href="/favourites" legacyBehavior passHref>
-                                    <NavDropdown.Item active={router.pathname === "/favourites"} onClick={handleNavClick}>+ favourite</NavDropdown.Item>
+                            {token && (
+                                <Link href="/search" legacyBehavior passHref>
+                                    <Nav.Link active={router.pathname === "/search"} onClick={handleNavClick}>Advanced Search</Nav.Link>
                                 </Link>
-                                <Link href="/history" legacyBehavior passHref>
-                                    <NavDropdown.Item active={router.pathname === "/history"} onClick={handleNavClick}>Search History</NavDropdown.Item>
-                                </Link>
-                            </NavDropdown>
+                            )}
                         </Nav>
+                        {token && (
+                            <>
+                                &nbsp;
+                                <Form className="d-flex" onSubmit={handleSubmit}>
+                                    <Form.Control
+                                        type="search"
+                                        placeholder="Search"
+                                        className="me-2"
+                                        aria-label="Search"
+                                        value={searchField}
+                                        onChange={(e) => setSearchField(e.target.value)}
+                                    />
+                                    <Button type="submit" variant="success" style={{ backgroundColor: "#39B8B8" }}>Search</Button>
+                                </Form>
+                            </>
+                        )}
+                        &nbsp;
+                        {token ? (
+                            <Nav>
+                                <NavDropdown title={token.userName || "User"} id="user-dropdown">
+                                    <Link href="/favourites" legacyBehavior passHref>
+                                        <NavDropdown.Item active={router.pathname === "/favourites"} onClick={handleNavClick}>Favourites</NavDropdown.Item>
+                                    </Link>
+                                    <Link href="/history" legacyBehavior passHref>
+                                        <NavDropdown.Item active={router.pathname === "/history"} onClick={handleNavClick}>Search History</NavDropdown.Item>
+                                    </Link>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+                                </NavDropdown>
+                            </Nav>
+                        ) : (
+                            <Nav>
+                                <Link href="/register" legacyBehavior passHref>
+                                    <Nav.Link active={router.pathname === "/register"} onClick={handleNavClick}>Register</Nav.Link>
+                                </Link>
+                                <Link href="/login" legacyBehavior passHref>
+                                    <Nav.Link active={router.pathname === "/login"} onClick={handleNavClick}>Login</Nav.Link>
+                                </Link>
+                            </Nav>
+                        )}
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
