@@ -10,45 +10,52 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { authenticateUser } from "../lib/authenticate";
-import { Form, Button, Container, Card, Alert } from "react-bootstrap";
+import { useAtom } from "jotai";
+import { favouritesAtom, searchHistoryAtom } from "../store";
+import { getFavourites, getHistory } from "../lib/userData";
+import { Form, Button, Card, Alert, Container } from "react-bootstrap";
 
 export default function Login() {
-    const [userName, setUserName] = useState("");
+    const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState(null);
     const router = useRouter();
+    const [, setFavouritesList] = useAtom(favouritesAtom);
+    const [, setSearchHistory] = useAtom(searchHistoryAtom);
+
+    async function updateAtoms() { // updates favourites and history from API fetched data
+        setFavouritesList(await getFavourites());
+        setSearchHistory(await getHistory());
+    }
+
     async function handleSubmit(e) {
         e.preventDefault();
-        if (await authenticateUser(userName, password)) router.push("/"); 
-        else setError("Invalid username or password. Please try again.");
+        try {
+            const result = await authenticateUser(user, password);
+            if (result) {
+                await updateAtoms(); // Fetch favourites/history before redirect
+                router.push("/api/user/favourites");
+            }
+        } catch (err) {
+            setError("Invalid username or password.");
+        }
     }
 
     return (
-        <Container className="d-flex justify-content-center align-items-center vh-100">
+        <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
             <Card style={{ width: "400px" }} className="p-4 shadow">
                 <Card.Body>
-                    <Card.Title className="text-center mb-3">Login</Card.Title>
+                    <h2 className="mb-3 text-center">Login</h2>
+                    <p className="text-center">Enter your credentials to log in.</p>
                     {error && <Alert variant="danger">{error}</Alert>}
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
                             <Form.Label>Username</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter username"
-                                value={userName}
-                                onChange={(e) => setUserName(e.target.value)}
-                                required
-                            />
+                            <Form.Control type="text" value={user} onChange={(e) => setUser(e.target.value)} required />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Enter password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
+                            <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         </Form.Group>
                         <Button variant="primary" type="submit" className="w-100">Login</Button>
                     </Form>

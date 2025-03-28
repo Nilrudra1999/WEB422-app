@@ -14,6 +14,7 @@ import ArtworkCard from '@/components/ArtworkCard';
 
 export default function Favourites() {
     const [favouritesList] = useAtom(favouritesAtom); // Access to the favourites list
+    if(!favouritesList) return null;
 
     return (
         <Container>

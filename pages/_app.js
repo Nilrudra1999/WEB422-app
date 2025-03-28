@@ -14,13 +14,13 @@ export default function MyApp({ Component, pageProps }) {
 
     useEffect(() => {
         const checkAuth = async () => {
-            if (!isAuthenticated() && router.pathname !== "/login" && router.pathname !== "/register") router.replace("/login"); 
+            if (!isAuthenticated() && router.pathname !== "/api/user/login" && router.pathname !== "/api/user/register") router.replace("/api/user/login"); 
             else setLoading(false);
         };
         checkAuth();
     }, [router.pathname]);
 
-    if (loading && router.pathname !== "/login" && router.pathname !== "/register") {
+    if (loading && router.pathname !== "/api/user/login" && router.pathname !== "/api/user/register") {
         return null; // preventing flashing of unauthorized pages before redirect operation
     }
 

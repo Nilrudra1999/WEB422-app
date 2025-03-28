@@ -9,61 +9,49 @@
 ********************************************************************************/
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { registerUser } from "../lib/authenticate.js";
-import { Form, Button, Container, Card, Alert } from "react-bootstrap";
+import { registerUser } from "../lib/authenticate";
+import { Form, Button, Card, Alert, Container } from "react-bootstrap";
 
 export default function Register() {
-    const [userName, setUserName] = useState("");
+    const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState(null);
     const router = useRouter();
+
     async function handleSubmit(e) {
         e.preventDefault();
         if (password !== password2) {
-            setError("Passwords do not match.");
+            setError("Passwords do not match!");
             return;
         }
-        if (await registerUser(userName, password, password2)) router.push("/login"); 
-        else setError("Registration failed. Please try again.");
+        try {
+            const result = await registerUser(user, password, password2);
+            if (result) router.push("/api/user/login");
+        } catch (err) {
+            setError("Registration failed. Try again.");
+        }
     }
 
     return (
-        <Container className="d-flex justify-content-center align-items-center vh-100">
+        <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
             <Card style={{ width: "400px" }} className="p-4 shadow">
                 <Card.Body>
-                    <Card.Title className="text-center mb-3">Register</Card.Title>
+                    <h2 className="mb-3 text-center">Register</h2>
+                    <p className="text-center">Create an account to continue.</p>
                     {error && <Alert variant="danger">{error}</Alert>}
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
                             <Form.Label>Username</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter username"
-                                value={userName}
-                                onChange={(e) => setUserName(e.target.value)}
-                                required
-                            />
+                            <Form.Control type="text" value={user} onChange={(e) => setUser(e.target.value)} required />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Enter password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
+                            <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Re-enter password"
-                                value={password2}
-                                onChange={(e) => setPassword2(e.target.value)}
-                                required
-                            />
+                            <Form.Control type="password" value={password2} onChange={(e) => setPassword2(e.target.value)} required />
                         </Form.Group>
                         <Button variant="success" type="submit" className="w-100">Register</Button>
                     </Form>

@@ -9,11 +9,11 @@
 ********************************************************************************/
 import useSWR from 'swr';
 import { Card, Button } from 'react-bootstrap';
-import Link from 'next/link';
 import Error from 'next/error';
 import { useAtom } from 'jotai';
 import { useState, useEffect } from 'react';
 import { favouritesAtom } from '@/store';
+import { addToFavourites, removeFromFavourites } from '@/lib/userData';
 
 const fetcher = (url) => fetch(url).then((res) => res.json()); // fetcher function for SWR
 
@@ -24,23 +24,20 @@ export default function ArtworkCardDetail({ objectID }) {
 
     // Update showAdded if objectID is in the favourites
     useEffect(() => {
-        setShowAdded(favouritesList.includes(objectID));
+        setShowAdded(favouritesList?.includes(objectID));
     }, [favouritesList, objectID]);
 
-    const favouritesClicked = () => {
+    const favouritesClicked = async () => {
         if (showAdded) {
-            setFavouritesList(current => current.filter(fav => fav !== objectID));
-            setShowAdded(false);
+            setFavouritesList(await removeFromFavourites(objectID));
         } else {
-            setFavouritesList(current => [...current, objectID]);
-            setShowAdded(true);
+            setFavouritesList(await addToFavourites(objectID));
         }
     };
 
     // Error guard statements, for null values, and other errors
-    if (error) { return <Error statusCode={404} />; }
-    if (!data) { return null; }
-
+    if (error) return <Error statusCode={404} />;
+    if (!data) return null;
     const { primaryImage, title, objectDate, classification, medium, artistDisplayName, creditLine, dimensions, artistWikidata_URL } = data;
 
     return (
