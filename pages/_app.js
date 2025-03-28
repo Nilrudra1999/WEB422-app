@@ -26,7 +26,7 @@ export default function MyApp({ Component, pageProps }) {
 
     useEffect(() => {
         const checkAuth = async () => {
-            if (!isAuthenticated() && !["/api/user/login", "/api/user/register"].includes(router.pathname)) router.replace("/api/user/login");
+            if (!isAuthenticated() && !["/login", "/register"].includes(router.pathname)) router.replace("/login");
             else setLoading(false);
         };
         checkAuth();
